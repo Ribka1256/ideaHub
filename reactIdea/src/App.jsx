@@ -7,6 +7,8 @@ import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import NavBar from './components/NavBar.jsx'
+import IdeaDetail from './pages/IdeaDetail.jsx'
+import CreateIdea from './pages/CreateIdea.jsx'
 
 function App() {
     const location = useLocation();
@@ -19,6 +21,8 @@ function App() {
     <Route path='/login' element={<Login/>}></Route>
     <Route path='/home' element={<Home/>}></Route>
     <Route path='/register' element={<Register/>}></Route>
+    <Route path='/ideas/:id' element={<IdeaDetail/>}></Route>
+    <Route path='/ideas/create' element={<CreateIdea/>}></Route>
   </Routes>
   </>
   )

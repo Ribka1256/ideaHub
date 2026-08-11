@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import '../style/theme.css';
-import '../style/auth.css';
 import { useAuth } from '../context/AuthContext';
+import '../style/theme.css'; // Ensure this matches your CSS filename
+
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -23,42 +22,56 @@ function Login() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-card__icon">☕</div>
-        <h2>Welcome Back</h2>
-        <p className="auth-card__subtitle">Log in to keep sharing your ideas</p>
+    <div className="nature-auth-wrapper">
+      <div className="nature-auth-card">
+        {/* The Icon Circle from the grid cards */}
+        <div className="auth-circle-icon">🌿</div>
+        
+        <h1 className="auth-title">Welcome Back</h1>
+        <p className="auth-subtitle">Continue your creative journey</p>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form__group">
-            <label htmlFor="username">Username</label>
+        <form onSubmit={handleSubmit} className="nature-form">
+          <div className="nature-input-group">
+            <label>Username</label>
             <input
-              id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="yourname"
+              placeholder="Enter your name"
+              required
             />
           </div>
 
-          <div className="form__group">
-            <label htmlFor="password">Password</label>
+          <div className="nature-input-group">
+            <label>Password</label>
             <input
-              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              required
             />
           </div>
 
-          {error && <p className="auth-error">{error}</p>}
+          <div className="auth-extras">
+             <Link to="/forgot" className="forgot-link">Forgot Password?</Link>
+          </div>
 
-          <button className="btn btn--main" type="submit">Login</button>
+          {error && <div className="nature-error-message">{error}</div>}
+
+          <button className="btn-auth-pill" type="submit">Sign In</button>
         </form>
 
-        <p className="auth-link">
-          Don't have an account? <Link to="/register">Sign Up</Link>
+        <div className="auth-divider">
+          <span>Or</span>
+        </div>
+
+        <button className="btn-google-outline">
+          <span className="g-icon">G</span> Sign in with Google
+        </button>
+
+        <p className="nature-auth-footer">
+          Don't have an account? <Link to="/register">Join Now</Link>
         </p>
       </div>
     </div>
