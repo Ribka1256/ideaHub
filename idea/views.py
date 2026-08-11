@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
-from .models import Idea, AccessRequest
-from .serializers import IdeaSerializer, IdeaDetailSerializer, AccessRequestSerializer
+from .models import Idea, AccessRequest, Comment
+from .serializers import IdeaSerializer, IdeaDetailSerializer, AccessRequestSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
 
 from idea import models
@@ -68,3 +68,18 @@ class AccessRequestViewSet(viewsets.ModelViewSet):
         return Response(AccessRequestSerializer(access_request).data)    
         
 
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+    permissions_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        idea_id = self.request.query_params.get('idea')
+
+        qs = Comment.objects.all()
+        if idea_id:
+            qs = qs.filter(idea_id=idea_id)
+
+        return qs
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)

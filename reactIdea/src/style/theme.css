@@ -1,0 +1,148 @@
+:root {
+  --cream: #F0DFC8;
+  --cream-light: #F7EDDD;
+  --tan: #D9BFA0;
+  --coffee: #6B4226;
+  --coffee-dark: #4A2C17;
+  --coffee-light: #A97155;
+  --text-dark: #3B2A1E;
+  --text-muted: #8A7560;
+  --white: #FFFDF9;
+  --shadow: rgba(107, 66, 38, 0.15);
+  --success: #6B8E4E;
+  --danger: #B5533C;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: var(--cream);
+  color: var(--text-dark);
+}
+
+.app {
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+.navbar {
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.navbar__brand {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--coffee-dark);
+  letter-spacing: 0.5px;
+}
+
+.navbar__links {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.navbar__links a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+}
+
+.navbar__links a:hover,
+.navbar__links a.active {
+  background: var(--cream);
+  color: var(--coffee-dark);
+}
+
+.btn--logout, .btn--login {
+  background: var(--coffee);
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.btn--logout:hover, .btn--login:hover {
+  background: var(--coffee-dark);
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cream);
+  padding: 1rem;
+}
+
+.auth-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 10px 30px var(--shadow);
+}
+
+.auth-card h2 {
+  color: var(--coffee-dark);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-card .form__group {
+  margin-bottom: 1rem;
+}
+
+.auth-card label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid var(--tan);
+  border-radius: 12px;
+  background: var(--cream-light);
+  font-size: 0.9rem;
+}
+
+.auth-card input:focus {
+  outline: none;
+  border-color: var(--coffee);
+}
+
+.auth-card .btn--main {
+  margin-top: 0.5rem;
+}
+
+.auth-card .auth-link {
+  text-align: center;
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.auth-card .auth-link a {
+  color: var(--coffee);
+  font-weight: 600;
+  text-decoration: none;
+}
