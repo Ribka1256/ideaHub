@@ -9,6 +9,11 @@ import Register from './pages/Register.jsx'
 import NavBar from './components/NavBar.jsx'
 import IdeaDetail from './pages/IdeaDetail.jsx'
 import CreateIdea from './pages/CreateIdea.jsx'
+import Profile from './pages/Profile.jsx'
+import IdeaList from './pages/IdeaList.jsx'
+import EditIdea from './pages/EditIdea.jsx'
+import Dashboard from './pages/Dashboard.jsx'
+import IncomingRequests from './pages/IncomingRequest.jsx'
 
 function App() {
     const location = useLocation();
@@ -23,6 +28,11 @@ function App() {
     <Route path='/register' element={<Register/>}></Route>
     <Route path='/ideas/:id' element={<IdeaDetail/>}></Route>
     <Route path='/ideas/create' element={<CreateIdea/>}></Route>
+    <Route path='/profile' element={<Profile/>}></Route>
+    <Route path='/idealist' element={<IdeaList/>}></Route>
+    <Route path='/editidea' element={<EditIdea/>}></Route>
+    <Route path='/dashboard' element={<Dashboard/>}></Route>
+    <Route path='/incomingrequest' element={<IncomingRequests/>}></Route>
   </Routes>
   </>
   )

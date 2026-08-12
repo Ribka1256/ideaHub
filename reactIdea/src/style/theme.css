@@ -9,14 +9,15 @@
   --card-tan: #D5B791;
   --text-white: #FFFFFF;
 }
-
 .app-home {
   background-color: var(--bg-deep-green);
   font-family: 'Inter', sans-serif;
   color: white;
   min-height: 100vh;
+  /* Add these two lines */
+  width: 100%;
+  overflow-x: hidden; 
 }
-
 /* --- HERO SECTION --- */
 .hero-split {
   background-color: var(--hero-sage);
@@ -102,13 +103,19 @@
 .grid-section {
   padding: 80px 10%;
   background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-  background-size: 30px 30px; /* Subtle texture like the photo */
+  background-size: 30px 30px;
+  /* Add this to keep the grid centered */
+  display: flex; 
+  justify-content: center;
 }
 
 .ideas-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* CHANGED: This makes the columns wrap automatically */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
   gap: 30px;
+  width: 100%;
+  max-width: 1200px; /* Limits the width to match the header bar above it */
 }
 
 /* Square Cards */
@@ -224,6 +231,8 @@
 
 .nature-input-group {
   margin-bottom: 20px;
+  padding-right: 30px;
+
 }
 
 .nature-input-group label {
@@ -515,4 +524,387 @@
   height: 100vh;
   background: var(--bg-deep-green);
   color: var(--hero-sage);
+}
+
+/* --- NATURE NAV BAR (RENNALE THEME) --- */
+
+.nature-nav {
+  position: fixed; /* Stays at top while scrolling */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: rgba(11, 45, 36, 0.85); /* Semi-transparent Forest Green */
+  backdrop-filter: blur(12px); /* Glassmorphism effect */
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--hero-sage); /* Soft Sage Logo */
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 5px 0;
+}
+
+.nav-link:hover {
+  opacity: 1;
+  color: var(--hero-sage);
+}
+
+/* Underline effect for active page */
+.nav-link.active {
+  opacity: 1;
+  color: var(--hero-sage);
+}
+
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--hero-sage);
+  border-radius: 2px;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+}
+
+.user-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-greeting {
+  font-size: 0.85rem;
+  color: white;
+  opacity: 0.8;
+}
+
+/* Logout & Login Buttons matching Home Page style */
+.btn-logout-pill, .btn-login-pill {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-logout-pill:hover, .btn-login-pill:hover {
+  background: var(--hero-sage);
+  color: var(--bg-deep-green);
+  border-color: var(--hero-sage);
+}
+
+/* Ensure content doesn't get hidden behind fixed navbar */
+body {
+  padding-top: 80px; 
+}
+
+/* --- PROFILE SPECIFIC STYLES --- */
+
+.nature-success-message {
+  background-color: #edf7ed;
+  color: #1e4620;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  margin-bottom: 25px;
+  text-align: center;
+  border: 1px solid #c3e6cb;
+}
+
+/* Ensure the profile card feels centered and balanced */
+.detail-main-card .nature-form {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.profile-password-section {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Custom loader color for profile */
+.nature-loader {
+  background-color: var(--bg-deep-green);
+  color: var(--hero-sage);
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+}
+
+/* --- SEARCH STYLES FOR IDEALIST --- */
+
+.search-container {
+  position: relative;
+  max-width: 500px;
+  margin-top: 30px;
+}
+
+.nature-search-input {
+  width: 100%;
+  padding: 18px 60px 18px 25px;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(13, 59, 49, 0.2);
+  border-radius: 50px;
+  font-size: 1rem;
+  color: var(--bg-deep-green);
+  transition: all 0.3s ease;
+}
+
+.nature-search-input:focus {
+  outline: none;
+  background-color: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border-color: var(--feature-bar);
+}
+
+.search-icon-nature {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  opacity: 0.5;
+}
+
+/* Square Image for Navigation Circle */
+.square-image-nav {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.card-hover-hint {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.exact-card:hover .card-hover-hint {
+  opacity: 1;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 100px 0;
+  color: var(--hero-sage);
+  font-style: italic;
+  font-size: 1.2rem;
+}
+
+/* --- NATURE DASHBOARD STYLES --- */
+
+.dashboard-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.table-wrapper {
+  background: white;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.nature-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.nature-table th {
+  background-color: var(--feature-bar);
+  color: white;
+  padding: 20px 30px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nature-table td {
+  padding: 25px 30px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  color: var(--bg-deep-green);
+}
+
+.table-title-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-title-cell strong {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+
+.table-title-cell span {
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+/* Custom Badges */
+.nature-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge--published { background: #E8F9F6; color: var(--primary-teal); }
+.badge--draft { background: #f0f0f0; color: #666; }
+
+/* Table Buttons */
+.table-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.table-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.table-btn.edit {
+  background-color: var(--hero-sage);
+  color: var(--bg-deep-green);
+}
+
+.table-btn.delete {
+  background-color: #fce8e8;
+  color: #c53030;
+}
+
+.table-btn:hover {
+  filter: brightness(0.9);
+  transform: translateY(-2px);
+}
+
+.empty-state {
+  padding: 60px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.3;
+}
+
+/* --- INCOMING REQUESTS SPECIFIC STYLES --- */
+
+.requester-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mini-avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--card-brown);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* Legend and Dots */
+.status-legend {
+    font-size: 0.85rem;
+    color: var(--bg-deep-green);
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+.dot--pending { background-color: #d4a017; } /* Gold from home page */
+
+/* Extra Badge Colors */
+.badge--pending { background: #FFF9E6; color: #D4A017; border: 1px solid #FFECB3; }
+.badge--approved { background: #E8F9F6; color: #14C3A5; border: 1px solid #B2EBF2; }
+.badge--denied { background: #FCE8E8; color: #C53030; border: 1px solid #F8D7DA; }
+
+.action-completed {
+    font-size: 0.8rem;
+    font-style: italic;
+    opacity: 0.4;
+}
+
+/* Hover effect for the table rows */
+.nature-table tbody tr:hover {
+    background-color: rgba(127, 163, 109, 0.05); /* Very light sage tint */
 }

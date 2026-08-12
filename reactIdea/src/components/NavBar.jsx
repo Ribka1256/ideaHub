@@ -30,7 +30,7 @@ function NavBar() {
           <NavLink to="/dashboard" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
             Dashboard
           </NavLink>
-          <NavLink to="/idea/create" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
+          <NavLink to="/ideas/create" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
             Create
           </NavLink>
           <NavLink to="/profile" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>
