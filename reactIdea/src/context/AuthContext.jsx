@@ -15,6 +15,8 @@ const login = async (username, password) => {
   localStorage.setItem('access_token', res.data.access);
   localStorage.setItem('refresh_token', res.data.refresh);
   setAccessToken(res.data.access);
+    const meRes = await getMe();   // <- confirm this is present and awaited
+  setUser(meRes.data);
 };
 
 const logout = () =>{
@@ -28,7 +30,7 @@ useEffect(() =>{
   if(token){
     getMe()
     .then((res) => setUser(res.data))
-    .catch((err) => {logout(); console.error('Failed to fetch user:', err)})
+    .catch(() => logout())  
     .finally(() => setLoading(false));
   }
   else{

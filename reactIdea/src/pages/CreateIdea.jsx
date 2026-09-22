@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createIdea } from '../api/ideas';
-import '../style/theme.css'; // Using the unified nature theme
+import NavBar from '../components/NavBar'; // Ensure NavBar is included
+import '../style/theme.css'; 
 
 function CreateIdea() {
   const [title, setTitle] = useState('');
@@ -15,115 +16,97 @@ function CreateIdea() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
     const formData = new FormData();
     formData.append('title', title);
     formData.append('summary', summary);
     formData.append('category', category);
     formData.append('status', status);
-
     if (document) formData.append('document', document);
-    // Fixed key name to cover_image to match typical Django models
     if (coverImage) formData.append('cover_image', coverImage);
 
     try {
       await createIdea(formData);
       navigate('/dashboard');
     } catch (err) {
-      setError('Failed to create idea. Please check your inputs and file sizes.');
+      setError('Failed to create idea. Please check inputs.');
     }
   };
 
   return (
-    <div className="nature-auth-wrapper" style={{ padding: '80px 20px' }}>
-      <div className="nature-auth-card" style={{ maxWidth: '700px' }}>
-        <div className="auth-circle-icon">🌱</div>
+    <div className="nature-auth-wrapper glass-bg">
+      <NavBar />
+      
+      <div className="share-vision-card">
+        <div className="vision-icon">🌱</div>
         
-        <h1 className="auth-title">Share Your Vision</h1>
-        <p className="auth-subtitle">Plant the seeds for your next great venture</p>
+        <h1 className="vision-title">Share Your Vision</h1>
+        <p className="vision-subtitle">Plant your seeds for your next great venture</p>
 
         <form onSubmit={handleSubmit} className="nature-form">
           <div className="form-row-dual">
             <div className="nature-input-group">
-              <label htmlFor="title">Idea Title</label>
+              <label>Idea Title</label>
               <input 
-                id="title" 
                 value={title} 
                 onChange={(e) => setTitle(e.target.value)} 
-                placeholder="e.g. Sustainable Urban Farming"
+                placeholder="eg: farming"
                 required
               />
             </div>
 
             <div className="nature-input-group">
-              <label htmlFor="category">Category</label>
+              <label>Category</label>
               <input 
-                id="category" 
                 value={category} 
                 onChange={(e) => setCategory(e.target.value)} 
-                placeholder="e.g. Technology"
+                placeholder="eg: tech"
               />
             </div>
           </div>
 
           <div className="nature-input-group">
-            <label htmlFor="summary">Public Summary</label>
+            <label>Public Summary</label>
             <textarea 
-              id="summary" 
-              className="nature-textarea"
               value={summary} 
               onChange={(e) => setSummary(e.target.value)} 
-              placeholder="Briefly describe your idea for the community feed..."
+              placeholder="briefly describe your idea"
               required
             />
           </div>
 
           <div className="form-row-dual">
             <div className="nature-input-group">
-              <label htmlFor="cover">Cover Image</label>
-              <div className="file-input-wrapper">
-                <input 
-                  id="cover" 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={(e) => setCoverImage(e.target.files[0])} 
-                />
-              </div>
+              <label>Cover Image</label>
+              <input 
+                type="file" 
+                className="custom-file-input"
+                onChange={(e) => setCoverImage(e.target.files[0])} 
+              />
             </div>
 
             <div className="nature-input-group">
-              <label htmlFor="document">Full Document (Protected)</label>
-              <div className="file-input-wrapper">
-                <input 
-                  id="document" 
-                  type="file" 
-                  onChange={(e) => setDocument(e.target.files[0])} 
-                />
-              </div>
+              <label>Full Document</label>
+              <input 
+                type="file" 
+                className="custom-file-input"
+                onChange={(e) => setDocument(e.target.files[0])} 
+              />
             </div>
           </div>
 
           <div className="nature-input-group">
-            <label htmlFor="status">Publishing Status</label>
-            <select 
-              id="status" 
-              className="nature-select"
-              value={status} 
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <option value="draft">Save as Draft (Private)</option>
-              <option value="published">Publish (Visible to All)</option>
+            <label>Publishing Status</label>
+            <select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="draft">save as draft</option>
+              <option value="published">publish now</option>
             </select>
           </div>
 
           {error && <div className="nature-error-message">{error}</div>}
 
-          <div style={{ marginTop: '30px' }}>
-            <button className="btn-auth-pill" type="submit">
-              🚀 {status === 'draft' ? 'Save Draft' : 'Launch Idea'}
-            </button>
-          </div>
+          <button className="btn-vision-orange" type="submit">
+            Save Draft
+          </button>
         </form>
       </div>
     </div>

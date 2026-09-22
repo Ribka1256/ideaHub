@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getIdea, getComments, createComment } from '../api/ideas';
-import '../style/theme.css'; // Use the same theme file
+import { getIdea, getComments, createComment, deleteComment } from '../api/ideas';
+import AccessResquestModel from '../components/AccessResquestModel.jsx';
+import NavBar from '../components/NavBar'; // Ensure NavBar is imported
+import '../style/theme.css'; 
 
 function IdeaDetail() {
   const { id } = useParams();
@@ -14,13 +16,20 @@ function IdeaDetail() {
   const [loading, setLoading] = useState(true);
 
   const load = () => {
-    // FIXED: Passed 'id' to getIdea
     getIdea(id)
       .then((res) => setIdea(res.data))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false)); // FIXED: lowercase false
-    
-    getComments(id).then((res) => setComments(res.data));
+      .catch((err) => {
+        console.error(err);
+        setIdea(null);
+      })
+      .finally(() => setLoading(false));
+
+    getComments(id)
+      .then((res) => setComments(res.data))
+      .catch((err) => {
+        console.error(err);
+        setComments([]);
+      });
   };
 
   useEffect(() => { load(); }, [id]);
@@ -33,94 +42,115 @@ function IdeaDetail() {
     getComments(id).then((res) => setComments(res.data));
   };
 
+  const handleDelete = async (commentId) => {
+    if (!window.confirm('Delete this comment?')) return;
+    await deleteComment(commentId);
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+  };
+
   if (loading) return <div className="nature-loader">🌱 Growing content...</div>;
   if (!idea) return <div className="nature-error">Idea not found.</div>;
 
   return (
-    <div className="app-home">
-      {/* 1. HERO HEADER - Title and Meta */}
-      <header className="hero-split" style={{ height: '50vh', clipPath: 'polygon(0 0, 100% 0, 100% 90%, 0% 100%)' }}>
-        <div className="hero-content">
-          <span className="category-tag">{idea.category || 'General Concept'}</span>
-          <h1 style={{ fontSize: '3.5rem' }}>{idea.title}</h1>
-          <p>By <strong>{idea.owner_username}</strong></p>
-        </div>
-      </header>
+    <div className="detail-page-wrapper">
+      <NavBar />
+      
+      {/* 1. HERO SECTION: Title and Author matching the design */}
+      <section className="idea-detail-hero">
+        <div className="content-wrap">
+          <span className="concept-label">{idea.category || 'General Concept'}</span>
+          <h1 className="idea-title">{idea.title}</h1>
+          <p className="author-label">By {idea.owner_username}</p>
 
-      {/* 2. OVERLAPPING CONTENT CARD */}
-      <section className="detail-container">
-        <div className="detail-main-card">
-          <div className="detail-layout">
-            
-            {/* Left Column: Summary */}
-            <div className="detail-description">
-              <h3 className="section-serif">Project Summary</h3>
+          {/* 2. THE GLASS SUMMARY CARD */}
+          <div className="summary-container">
+            <div className="summary-text-side">
+              <h2>Project Summary</h2>
               <p>{idea.summary}</p>
             </div>
 
-            {/* Right Column: Access & Actions */}
-            <div className="detail-sidebar">
-              <div className="access-box color-sage">
-                {idea.document ? (
-                  <>
-                    <div className="sidebar-icon">🔓</div>
-                    <h4>Document Unlocked</h4>
-                    <a href={idea.document} className="btn-pill" target="_blank" rel="noopener noreferrer">
-                      View Full Pitch
-                    </a>
-                  </>
-                ) : (
-                  <>
-                    <div className="sidebar-icon">🔒</div>
-                    <h4>Private Document</h4>
-                    <p>This IP is protected. Request access to see full details.</p>
-                    {user && (
-                      <button className="btn-pill" onClick={() => setShowRequestModal(true)}>
-                        Request Access
-                      </button>
-                    )}
-                  </>
-                )}
-              </div>
+            {/* 3. ACCESS BOX (Sub-card) */}
+            <div className="private-card">
+              {idea.document ? (
+                <>
+                  <div className="lock-icon">🔓</div>
+                  <h4>Document Unlocked</h4>
+                  <a href={idea.document} className="btn-request" target="_blank" rel="noopener noreferrer" style={{textDecoration: 'none'}}>
+                    View Full Pitch
+                  </a>
+                </>
+              ) : (
+                <>
+                  <div className="lock-icon">🔒</div>
+                  <h4>Private Document</h4>
+                  {user ? (
+                    <button className="btn-request" onClick={() => setShowRequestModal(true)}>
+                      Request Access..
+                    </button>
+                  ) : (
+                    <p style={{fontSize: '0.8rem', opacity: 0.7}}>Sign in to request access</p>
+                  )}
+                </>
+              )}
             </div>
           </div>
 
-          {/* 3. COMMENTS SECTION (The Sage Grid Look) */}
-          <div className="comments-section">
-            <h3 className="section-serif">Community Discussion</h3>
-            
-            {user && (
-              <form onSubmit={handleComment} className="comment-form">
-                <textarea
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  placeholder="Share your thoughts or feedback..."
-                />
-                <button className="btn-pill" type="submit">Post Comment</button>
-              </form>
+          {/* 4. COMMENTS SECTION */}
+          <h2 className="community-header">Community Discussion</h2>
+          
+<div className="comments-section-container">
+  {user && (
+    <form onSubmit={handleComment} className="comment-form">
+      <textarea
+        value={commentText}
+        onChange={(e) => setCommentText(e.target.value)}
+        placeholder="Share your thoughts or feedback..."
+      />
+      <button className="btn-pill" type="submit">Post Comment</button>
+    </form>
+  )}
+
+  <div className="comments-list">
+    {comments.map((c) => (
+      <div className="nature-comment" key={c.id}>
+        {/* Avatar with the first letter of the username */}
+        <div className="comment-avatar">{c.author_username[0].toUpperCase()}</div>
+        
+        <div className="comment-body">
+          <div className="comment-header">
+            <strong>{c.author_username}</strong>
+            {user && user.username === c.author_username && (
+              <button 
+                className="btn-delete-comment" 
+                onClick={() => handleDelete(c.id)}
+              >
+                Delete
+              </button>
             )}
-
-            <div className="comments-list">
-              {comments.map((c) => (
-                <div className="nature-comment" key={c.id}>
-                  <div className="comment-avatar">{c.author_username[0]}</div>
-                  <div className="comment-body">
-                    <strong>{c.author_username}</strong>
-                    <p>{c.text}</p>
-                  </div>
-                </div>
-              ))}
-              {comments.length === 0 && <p className="no-comments">No discussions yet. Be the first!</p>}
-            </div>
           </div>
+          <p>{c.text}</p>
+        </div>
+      </div>
+    ))}
+    
+    {comments.length === 0 && (
+      <p style={{ textAlign: 'center', color: 'white', opacity: 0.5, fontStyle: 'italic' }}>
+        No discussions yet. Be the first to start the conversation!
+      </p>
+    )}
+  </div>
+</div>
         </div>
       </section>
 
       {showRequestModal && (
-        <AccessRequestModal
+        <AccessResquestModel
           idea={idea}
           onClose={() => setShowRequestModal(false)}
-          onSuccess={() => setShowRequestModal(false)}
+          onSuccess={() => {
+            setShowRequestModal(false);
+            load(); // Reload to update status if necessary
+          }}
         />
       )}
       

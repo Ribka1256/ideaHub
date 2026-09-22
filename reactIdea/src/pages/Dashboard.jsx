@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getMyIdeas, deleteIdea } from '../api/ideas';
-import '../style/theme.css'; // Consistent nature theme
+import NavBar from '../components/NavBar';
+import '../style/theme.css'; 
 
 function Dashboard() {
   const [ideas, setIdeas] = useState([]);
@@ -25,79 +26,68 @@ function Dashboard() {
   if (loading) return <div className="nature-loader">🌿 Organizing your workspace...</div>;
 
   return (
-    <div className="app-home">
+    <div className="detail-page-wrapper">
+      <NavBar />
+
       {/* 1. HERO HEADER */}
-      <header className="hero-split" style={{ height: '40vh', clipPath: 'polygon(0 0, 100% 0, 100% 85%, 0% 100%)' }}>
-        <div className="hero-content">
-          <h1 className="auth-title" style={{ color: 'var(--feature-bar)', fontSize: '3.5rem' }}>Dashboard</h1>
-          <p style={{ color: 'var(--feature-bar)', opacity: 0.8 }}>
-            Manage your intellectual property and track your progress.
+      <header className="idea-detail-hero" style={{ minHeight: '40vh', paddingBottom: '0' }}>
+        <div className="content-wrap">
+          <h1 className="dashboard-hero-title">Dashboard</h1>
+          <p className="dashboard-hero-subtitle">
+            Manage your intellectual property and track your progress
           </p>
+
+          {/* 2. OVERLAPPING DASHBOARD CARD */}
+          <div className="summary-container" style={{ display: 'block', marginTop: '40px' }}>
+            
+            <div className="dashboard-card-header">
+              <h2 className="my-ideas-title">My Ideas 💡</h2>
+              <Link to="/ideas/create" className="btn-add-vision">
+                + add new vision
+              </Link>
+            </div>
+
+            <div className="ideas-list-wrapper">
+              {ideas.map((idea) => (
+                <div className="idea-row-container" key={idea.id}>
+                  {/* Left: Info */}
+                  <div className="idea-info-group">
+                    <strong>{idea.title}</strong>
+                    <span>{idea.category || 'General'}</span>
+                  </div>
+
+                  {/* Middle: Status Badge */}
+                  <div className="badge-pill-status">
+                    {idea.status || 'APPROVED'}
+                  </div>
+
+                  {/* Right: Actions */}
+                  <div className="dash-action-group">
+                    <button 
+                      className="btn-dash-edit" 
+                      onClick={() => navigate(`/ideas/${idea.id}/edit`)}
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      className="btn-dash-delete" 
+                      onClick={() => handleDelete(idea.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              {ideas.length === 0 && (
+                <div className="empty-state" style={{padding: '40px', textAlign: 'center', opacity: 0.5}}>
+                  <p>No ideas planted yet. Start your journey today.</p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </header>
-
-      {/* 2. OVERLAPPING DASHBOARD CARD */}
-      <div className="detail-container">
-        <div className="detail-main-card">
-          
-          <div className="dashboard-top-bar">
-            <h2 className="section-serif">My Ideas</h2>
-            <Link to="/idea/create" className="btn-pill" style={{ textDecoration: 'none' }}>
-              + Create New Vision
-            </Link>
-          </div>
-
-          <div className="table-wrapper">
-            <table className="nature-table">
-              <thead>
-                <tr>
-                  <th>Vision Title</th>
-                  <th>Status</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ideas.map((idea) => (
-                  <tr key={idea.id}>
-                    <td className="table-title-cell">
-                        <strong>{idea.title}</strong>
-                        <span>{idea.category || 'General'}</span>
-                    </td>
-                    <td>
-                      <span className={`nature-badge badge--${idea.status}`}>
-                        {idea.status}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
-                      <div className="table-actions">
-                        <button 
-                          className="table-btn edit" 
-                          onClick={() => navigate(`/ideas/${idea.id}/edit`)}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          className="table-btn delete" 
-                          onClick={() => handleDelete(idea.id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {ideas.length === 0 && (
-              <div className="empty-state">
-                <div className="empty-icon">🍃</div>
-                <p>No ideas planted yet. Start your journey today.</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
 
       <footer className="exact-footer">PESTRES 1</footer>
     </div>

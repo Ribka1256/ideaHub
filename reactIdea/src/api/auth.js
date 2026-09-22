@@ -16,9 +16,6 @@ export const refreshToken = (refresh) => {
     return api.post('accounts/token/refresh/', { refresh });
 };
 
-export const getMe = () => {
-    // Matches path('me/')
-    return api.get('accounts/me/');
-};
+export const getMe = () => api.get('accounts/me/');
 
 export const updateProfile = (data) => api.patch('accounts/me/', data)

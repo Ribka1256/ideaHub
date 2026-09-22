@@ -7,10 +7,14 @@ from django.shortcuts import get_object_or_404
 from .models import Idea, AccessRequest, Comment
 from .serializers import IdeaSerializer, IdeaDetailSerializer, AccessRequestSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
-
+from django.db.models import Q
+from django.contrib.auth import get_user_model
 from idea import models
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
+
+User = get_user_model()
 
 class IdeaViewSet(viewsets.ModelViewSet):
     serializer_class = IdeaSerializer
@@ -19,7 +23,7 @@ class IdeaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         qu = Idea.objects.select_related('owner')
         if self.action == 'list':
-            return qu.filter(status='published')
+            return qu.filter(status='approved')
 
         return qu
 
@@ -34,16 +38,27 @@ class IdeaViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         idea = self.get_object()
         if idea.can_view_full(request.user):
-            serializer = IdeaDetailSerializer(idea)
+            serializer = IdeaDetailSerializer(idea, context={'request': request})
         else:
-            serializer = IdeaSerializer(idea)
+            serializer = IdeaSerializer(idea, context={'request': request})
         return Response(serializer.data)
+    
     @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
     def my_ideas(self, request):
         idea = Idea.objects.filter(owner=request.user)
         serializer = IdeaSerializer(idea, many=True)
         return Response(serializer.data)
-        
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+    
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])
+    def featured(self, request):
+        ideas = Idea.objects.filter(status='approved', is_featured=True)
+        serializer = IdeaSerializer(ideas, many=True)
+        return Response(serializer.data)
+
 
 class AccessRequestViewSet(viewsets.ModelViewSet):
     serializer_class = AccessRequestSerializer
@@ -52,7 +67,7 @@ class AccessRequestViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return AccessRequest.objects.filter(
-            models.Q(requester=user) | models.Q(idea__owner=user)
+            Q(requester=user) | Q(idea__owner=user)
     )
 
     def perform_create(self, serializer):
@@ -83,3 +98,9 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+    def get_permission(self):
+        if self.action in ['destroy', 'update', 'partial_update']:
+            return  [permissions.IsAuthenticated(), permissions.IsCommentAuthor()]
+        return super().get_permissions()

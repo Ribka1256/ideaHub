@@ -17,5 +17,10 @@ export const denyRequest = (id) => api.post(`access-requests/${id}/deny/`);
 
 export const getIdeaDocumentUrl = (id) => `${api.defaults.baseURL}ideas/${id}/document/`;
 
+export const getFeaturedIdea = () => api.get('ideas/featured/')
+
 export const getComments = (ideaId) => api.get(`comments/?idea=${ideaId}`);
 export const createComment = (ideaId, text) => api.post('comments/', { idea: ideaId, text });
+export const deleteComment= (id) => api.delete(`comments/${id}/`);
+
+export const getUserProfile = (username) => api.get(`accounts/profile/${username}/`);

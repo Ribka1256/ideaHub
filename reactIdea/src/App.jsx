@@ -14,6 +14,7 @@ import IdeaList from './pages/IdeaList.jsx'
 import EditIdea from './pages/EditIdea.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import IncomingRequests from './pages/IncomingRequest.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 function App() {
     const location = useLocation();
@@ -23,17 +24,27 @@ function App() {
     <>
       {shouldShowNavbar && <NavBar />}
   <Routes>
-    <Route path='/login' element={<Login/>}></Route>
-    <Route path='/home' element={<Home/>}></Route>
-    <Route path='/register' element={<Register/>}></Route>
-    <Route path='/ideas/:id' element={<IdeaDetail/>}></Route>
-    <Route path='/ideas/create' element={<CreateIdea/>}></Route>
-    <Route path='/profile' element={<Profile/>}></Route>
-    <Route path='/idealist' element={<IdeaList/>}></Route>
-    <Route path='/editidea' element={<EditIdea/>}></Route>
-    <Route path='/dashboard' element={<Dashboard/>}></Route>
-    <Route path='/incomingrequest' element={<IncomingRequests/>}></Route>
-  </Routes>
+  <Route path='/login' element={<Login/>}></Route>
+  <Route path='/home' element={<Home/>}></Route>
+  <Route path='/register' element={<Register/>}></Route>
+  <Route path='/ideas/:id' element={<IdeaDetail/>}></Route>
+  <Route path="/dashboard" element={
+    <ProtectedRoute><Dashboard /></ProtectedRoute>
+  } />
+  <Route path="/ideas/create" element={
+    <ProtectedRoute><CreateIdea /></ProtectedRoute>
+  } />
+  <Route path="/ideas/:id/edit" element={
+    <ProtectedRoute><EditIdea /></ProtectedRoute>
+  } />
+  <Route path='/profile' element={
+    <ProtectedRoute><Profile /></ProtectedRoute>
+  } />
+  <Route path='/idealist' element={<IdeaList/>}></Route>
+  <Route path='/incomingrequest' element={
+    <ProtectedRoute><IncomingRequests /></ProtectedRoute>
+  } />
+</Routes>
   </>
   )
 }

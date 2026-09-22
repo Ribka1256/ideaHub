@@ -4,12 +4,11 @@ const api = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/',
 });
 
-
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
@@ -18,8 +17,8 @@ api.interceptors.request.use(
   }
 );
 
-api.interceptors.request.use(
-    (response) => response,
+api.interceptors.response.use(
+  (response) => response,
   async (error) => {
     const original = error.config;
     if (error.response?.status === 401 && !original._retry) {
@@ -41,7 +40,7 @@ api.interceptors.request.use(
       }
     }
     return Promise.reject(error);
-}
-)
+  }
+);
 
-export default api
+export default api;

@@ -25,6 +25,7 @@ function IdeaList() {
   );
 
   if (loading) return <div className="nature-loader">🌿 Exploring the forest of ideas...</div>;
+if (error) return <div className="status status--error">{error}</div>;
 
   return (
     <div className="app-home">

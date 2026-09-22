@@ -1,0 +1,6 @@
+
+media/idea_docs/*.zip
+media/idea_docs/*.mp3
+
+__pycache__/
+*.pyc

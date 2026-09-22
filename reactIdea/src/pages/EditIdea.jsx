@@ -12,6 +12,7 @@ function EditIdea() {
   const [status, setStatus] = useState('draft');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isFeatured, setIsFeatured] = useState('')
 
   useEffect(() => {
     // Fetch existing data
@@ -22,6 +23,7 @@ function EditIdea() {
         setSummary(i.summary);
         setCategory(i.category);
         setStatus(i.status);
+        setIsFeatured(i.isFeatured);
       })
       .catch(() => setError('Failed to load idea details.'))
       .finally(() => setLoading(false));
@@ -36,6 +38,7 @@ function EditIdea() {
     formData.append('summary', summary);
     formData.append('category', category);
     formData.append('status', status);
+    formData.append('isFeatured', isFeatured)
 
     try {
       await updateIdea(id, formData);
@@ -120,7 +123,15 @@ function EditIdea() {
                 <option value="published">Published (Live to Feed)</option>
               </select>
             </div>
-
+            <div className="nature-input-group">
+              <label htmlFor="isFeatured">Is Featured</label>
+              <input 
+              id='isFea'
+              value={isFeatured}
+              className="nature-feature"
+              onChange={(e) => setIsFeatured(e.target.value)}
+              type="checkbox"/>
+              </div>
             {error && <div className="nature-error-message">{error}</div>}
 
             {/* Action Buttons */}
@@ -135,7 +146,9 @@ function EditIdea() {
                 onClick={() => navigate('/dashboard')}
               >
                 Cancel
+                
               </button>
+
             </div>
           </form>
         </div>
